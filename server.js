@@ -14,8 +14,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 /**
-  * Configure Express middleware
-  */
+ * Configure Express middleware
+ */
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -25,6 +25,12 @@ app.set('view engine', 'ejs');
 
 // Tell Express where to find your templates
 app.set('views', path.join(__dirname, 'src/views'));
+
+// Make current URL available to all EJS templates
+app.use((req, res, next) => {
+    res.locals.currentPath = req.path;
+    next();
+});
 
 /**
  * Routes
@@ -44,7 +50,12 @@ app.get('/projects', async (req, res) => {
     res.render('projects', { title });
 });
 
+app.get('/categories', async (req, res) => {
+    const title = 'Service Project Categories';
+    res.render('categories', { title });
+});
+
 app.listen(PORT, () => {
-  console.log(`Server is running at http://127.0.0.1:${PORT}`);
-  console.log(`Environment: ${NODE_ENV}`);
+    console.log(`Server is running at http://127.0.0.1:${PORT}`);
+    console.log(`Environment: ${NODE_ENV}`);
 });
