@@ -332,3 +332,44 @@ JOIN project_category pc
 JOIN category c
     ON pc.category_id = c.category_id
 ORDER BY p.project_id;
+
+
+-- Verifying Projects and their associated categories with organization names
+SELECT
+    p.project_id,
+    p.title AS project,
+    c.name AS category
+FROM public.project p
+JOIN public.project_category pc
+    ON p.project_id = pc.project_id
+JOIN public.category c
+    ON pc.category_id = c.category_id
+ORDER BY p.project_id, c.category_id;
+
+
+-- verifying the Database Structure
+
+SELECT
+    tc.table_name,
+    tc.constraint_name,
+    tc.constraint_type
+FROM information_schema.table_constraints tc
+WHERE tc.table_schema = 'public'
+  AND tc.table_name IN (
+      'organization',
+      'project',
+      'category',
+      'project_category'
+  )
+ORDER BY tc.table_name, tc.constraint_type;
+
+
+-- Checking if every Project has at least one category associated with it
+
+SELECT
+    p.project_id,
+    p.title
+FROM public.project p
+LEFT JOIN public.project_category pc
+    ON p.project_id = pc.project_id
+WHERE pc.project_id IS NULL;
