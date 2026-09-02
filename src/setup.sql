@@ -208,3 +208,127 @@ FROM project
 JOIN organization
     ON project.organization_id = organization.organization_id
 ORDER BY project.date;
+
+
+
+-- ========================================
+-- Category Table
+-- ========================================
+CREATE TABLE category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+
+
+-- ========================================
+-- Project Category Relationship Table
+-- ========================================
+
+CREATE TABLE project_category (
+    project_id INTEGER NOT NULL,
+    category_id INTEGER NOT NULL,
+
+    PRIMARY KEY (project_id, category_id),
+
+    CONSTRAINT fk_project_category_project
+        FOREIGN KEY (project_id)
+        REFERENCES project (project_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_project_category_category
+        FOREIGN KEY (category_id)
+        REFERENCES category (category_id)
+        ON DELETE CASCADE
+);
+
+
+-- ========================================
+-- Insert Service Project Categories
+-- ========================================
+
+INSERT INTO category (name)
+VALUES
+    ('Environment'),
+    ('Education'),
+    ('Community Support');
+
+
+
+SELECT * FROM category;
+
+-- ========================================
+-- Associate projects with categories
+-- ========================================
+
+INSERT INTO project_category (project_id, category_id)
+VALUES
+    -- BrightFuture Builders
+    (1, 1),
+    (1, 3),
+
+    (2, 2),
+    (2, 3),
+
+    (3, 2),
+    (3, 3),
+
+    (4, 1),
+    (4, 3),
+
+    (5, 1),
+    (5, 3),
+
+    -- GreenHarvest Growers
+    (6, 1),
+    (6, 3),
+
+    (7, 2),
+    (7, 1),
+
+    (8, 1),
+    (8, 3),
+
+    (9, 1),
+    (9, 2),
+
+    (10, 1),
+    (10, 3),
+
+    -- UnityServe Volunteers
+    (11, 3),
+    (11, 1),
+
+    (12, 1),
+    (12, 3),
+
+    (13, 3),
+
+    (14, 3),
+
+    (15, 2),
+    (15, 3);
+
+
+SELECT project_id, title
+FROM project
+ORDER BY project_id;
+
+
+-- Verifying the relationships
+SELECT *
+FROM project_category
+ORDER BY project_id, category_id;
+
+-- Verifying the relationships with category names
+
+SELECT
+    p.project_id,
+    p.title,
+    c.name AS category
+FROM project p
+JOIN project_category pc
+    ON p.project_id = pc.project_id
+JOIN category c
+    ON pc.category_id = c.category_id
+ORDER BY p.project_id;
