@@ -58,7 +58,6 @@ app.get('/projects', async (req, res) => {
 
 app.get('/categories', async (req, res) => {
     const categories = await getAllCategories();
-    console.log('Categories:', categories);
     const title = 'Service Project Categories';
     res.render('categories', { title, categories });
 });
