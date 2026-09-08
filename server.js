@@ -27,12 +27,26 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Set EJS as the templating engine
 app.set('view engine', 'ejs');
 
-// Tell Express where to find your templates
+// Tell Express where to find the templates
 app.set('views', path.join(__dirname, 'src/views'));
 
 // Make current URL available to all EJS templates
 app.use((req, res, next) => {
     res.locals.currentPath = req.path;
+    next();
+});
+
+// Middleware to log all incoming requests
+app.use((req, res, next) => {
+    if (NODE_ENV === 'development') {
+        console.log(`${req.method} ${req.url}`);
+    }
+    next();
+});
+
+// Middleware to make NODE_ENV available to all templates
+app.use((req, res, next) => {
+    res.locals.NODE_ENV = NODE_ENV;
     next();
 });
 
@@ -45,9 +59,9 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/organizations', async (req, res) => {
-  const organizations = await getAllOrganizations();
-  const title = 'Our Partner Organizations';
-  res.render('organizations', { title, organizations });
+    const organizations = await getAllOrganizations();
+    const title = 'Our Partner Organizations';
+    res.render('organizations', { title, organizations });
 });
 
 app.get('/projects', async (req, res) => {
@@ -63,18 +77,11 @@ app.get('/categories', async (req, res) => {
 });
 
 app.listen(PORT, async () => {
-  try {
-    await testConnection();
-
-    console.log(
-      `Server is running at http://127.0.0.1:${PORT}`
-    );
-
-    console.log(`Environment: ${NODE_ENV}`);
-  } catch (error) {
-    console.error(
-      'Error connecting to the database:',
-      error
-    );
-  }
+    try {
+        await testConnection();
+        console.log(`Server is running at http://127.0.0.1:${PORT}`);
+        console.log(`Environment: ${NODE_ENV}`);
+    } catch (error) {
+        console.error('Error connecting to the database:', error);
+    }
 });
