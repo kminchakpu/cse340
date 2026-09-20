@@ -41,3 +41,17 @@
             </li>
         </ul>
     </nav>
+
+    <% const messages = flash(); %>
+
+<% if (Object.values(messages).some(messageList => messageList.length > 0)) { %>
+  <div class="flash-container">
+    <% Object.keys(messages).forEach(type => { %>
+      <% messages[type].forEach(msg => { %>
+        <div class="alert <%= type %>" role="alert">
+          <span><%= msg %></span>
+        </div>
+      <% }); %>
+    <% }); %>
+  </div>
+<% } %>
