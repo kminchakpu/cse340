@@ -2,6 +2,7 @@
 <main>
     <h1><%= project.title %></h1>
     <p><%= project.description %></p>
+
     <p>
         Date:
         <%= new Date(project.date).toLocaleDateString('en-US', {
@@ -10,12 +11,28 @@
             day: 'numeric'
         }) %>
     </p>
+
     <p>Location: <%= project.location %></p>
+
     <p>
         Partner Organization:
         <a href="/organization/<%= project.organization_id %>">
             <%= project.organization_name %>
         </a>
     </p>
+
+    <div class="category-tags">
+        <strong>Categories:</strong>
+
+        <% if (categories.length > 0) { %>
+            <% categories.forEach(category => { %>
+                <a href="/category/<%= category.category_id %>" class="category-tag">
+                    <%= category.name %>
+                </a>
+            <% }); %>
+        <% } else { %>
+            <span>No categories assigned.</span>
+        <% } %>
+    </div>
 </main>
 <%- include('partials/footer') %>
