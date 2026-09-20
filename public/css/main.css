@@ -171,6 +171,190 @@ footer p {
     margin: 0;
 }
 
+/* ========================================
+   New Organization Page
+======================================== */
+.new-organization-page {
+    display: block;
+    width: 100%;
+    min-height: 70vh;
+    padding: 3rem 1.5rem;
+    background-color: #f5f7fa;
+    box-sizing: border-box;
+}
+.new-organization-card {
+    display: block;
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 2.5rem;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+}
+.new-organization-header {
+    display: block;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+.new-organization-header h1 {
+    margin: 0 0 0.75rem;
+    padding: 0;
+    border: none;
+    color: #153e5c;
+    font-size: 2rem;
+    line-height: 1.2;
+    text-align: center;
+}
+.new-organization-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+.new-organization-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1.5rem;
+}
+.new-organization-field {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+}
+.new-organization-field label {
+    display: block;
+    color: #1e293b;
+    font-size: 1rem;
+    font-weight: 600;
+}
+.new-organization-field input,
+.new-organization-field textarea {
+    display: block;
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    background-color: #ffffff;
+    color: #1e293b;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.new-organization-field input {
+    min-height: 50px;
+}
+.new-organization-field textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+.new-organization-field input::placeholder,
+.new-organization-field textarea::placeholder {
+    color: #94a3b8;
+}
+.new-organization-field input:focus,
+.new-organization-field textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+.create-organization-btn {
+    display: block;
+    width: 100%;
+    margin: 0.5rem 0 0;
+    padding: 0.95rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #242424;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    appearance: none;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.create-organization-btn:hover {
+    background-color: #1d4ed8;
+    box-shadow: 0 5px 12px rgba(37, 99, 235, 0.25);
+    transform: translateY(-1px);
+}
+.create-organization-btn:active {
+    transform: translateY(0);
+}
+.create-organization-btn:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.35);
+    outline-offset: 3px;
+}
+@media (max-width: 600px) {
+    .new-organization-page {
+        padding: 2rem 1rem;
+    }
+    .new-organization-card {
+        padding: 1.5rem;
+    }
+    .new-organization-header h1 {
+        font-size: 1.6rem;
+    }
+}
+
+/* ========================================
+   Add New Organization Button
+======================================== */
+.add-organization-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+.add-organization-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.85rem 1.4rem;
+    border: 2px solid #546a9a;
+    border-radius: 8px;
+    background-color: #17223b;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.add-organization-btn:hover {
+    border-color: #1d4ed8;
+    background-color: #0f1e4a;
+    color: #ffffff;
+    box-shadow: 0 5px 12px rgba(37, 99, 235, 0.25);
+    transform: translateY(-2px);
+}
+.add-organization-btn:active {
+    box-shadow: none;
+    transform: translateY(0);
+}
+.add-organization-btn:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.35);
+    outline-offset: 3px;
+}
+@media (max-width: 600px) {
+    .add-organization-container {
+        width: 100%;
+    }
+    .add-organization-btn {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
 /* ---------- Responsive Design ---------- */
 
 @media (max-width: 768px) {
