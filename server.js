@@ -21,11 +21,13 @@ const app = express();
 
 // Configure express-session middleware
 app.use(session({
-    secret: SESSION_SECRET,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 1000 * 60 * 60 * 24 // Set cookie expiration to 1 day
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24, // Set cookie expiration to 1 day
     }
 }));
 
