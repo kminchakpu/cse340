@@ -28,6 +28,17 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 /**
+ * Trust Render's reverse proxy in production.
+ *
+ * Render handles HTTPS before forwarding requests to the Express
+ * application. Trusting the proxy allows Express to correctly
+ * recognize secure HTTPS requests when using secure cookies.
+ */
+if (NODE_ENV === 'production') {
+    app.set('trust proxy', 1);
+}
+
+/**
  * Make common variables available to all EJS templates.
  */
 app.use((req, res, next) => {
@@ -38,6 +49,9 @@ app.use((req, res, next) => {
 
 /**
  * Configure express-session middleware.
+ *
+ * Sessions are required for flash messages because flash messages
+ * must survive the redirect from one request to another.
  */
 app.use(
     session({
@@ -47,6 +61,7 @@ app.use(
         cookie: {
             secure: NODE_ENV === 'production',
             httpOnly: true,
+            sameSite: 'lax',
             maxAge: 1000 * 60 * 60 * 24, // 1 day
         },
     })
@@ -54,6 +69,9 @@ app.use(
 
 /**
  * Flash messages middleware.
+ *
+ * This must run after express-session because flash messages
+ * are stored inside the user's session.
  */
 app.use(flash);
 
@@ -108,7 +126,7 @@ app.use((err, req, res, next) => {
     console.error('Error occurred:', err.message);
     console.error('Stack trace:', err.stack);
 
-    // Make sure these variables are available to the error page.
+    // Make sure these variables are available to the error page
     res.locals.currentPath = req.path || '/';
     res.locals.NODE_ENV = NODE_ENV;
 
