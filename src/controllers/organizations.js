@@ -1,7 +1,8 @@
 import {
     getAllOrganizations,
     getOrganizationDetails,
-    createOrganization
+    createOrganization,
+    updateOrganization
 } from '../models/organizations.js';
 import { getProjectsByOrganizationId } from '../models/projects.js';
 import { body, validationResult } from 'express-validator';
@@ -61,6 +62,18 @@ const showNewOrganizationForm = async (req, res) => {
     });
 };
 
+const showEditOrganizationForm = async (req, res, next) => {
+    try {
+        const organizationId = req.params.id;
+        const organizationDetails = await getOrganizationDetails(organizationId);
+
+        const title = 'Edit Organization';
+        res.render('edit-organization', { title, organizationDetails });
+    } catch (error) {
+        next(error);
+    }
+};
+
 const processNewOrganizationForm = async (req, res, next) => {
     try {
         // Check for validation errors
@@ -114,10 +127,54 @@ const processNewOrganizationForm = async (req, res, next) => {
     }
 };
 
+const processEditOrganizationForm = async (req, res, next) => {
+    try {
+        const organizationId = req.params.id;
+
+        // Check validation errors
+        const results = validationResult(req);
+        if (!results.isEmpty()) {
+            results.array().forEach((error) => {
+                req.flash('error', error.msg);
+            });
+
+            return req.session.save((err) => {
+                if (err) {
+                    return next(err);
+                }
+                res.redirect(`/edit-organization/${organizationId}`);
+            });
+        }
+
+        const { name, description, contactEmail, logoFilename } = req.body;
+
+        await updateOrganization(
+            organizationId,
+            name,
+            description,
+            contactEmail,
+            logoFilename
+        );
+
+        req.flash('success', 'Organization updated successfully!');
+
+        req.session.save((err) => {
+            if (err) {
+                return next(err);
+            }
+            res.redirect(`/organization/${organizationId}`);
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 export {
     showOrganizationsPage,
     showOrganizationDetailsPage,
     showNewOrganizationForm,
+    showEditOrganizationForm,
     processNewOrganizationForm,
+    processEditOrganizationForm,
     organizationValidation
 };

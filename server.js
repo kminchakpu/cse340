@@ -146,16 +146,19 @@ app.use((err, req, res, next) => {
 /**
  * Start the server.
  *
- * Render provides the PORT environment variable.
- * 0.0.0.0 allows Render to access the application.
+ * Test database connection first, then start listening for HTTP requests.
  */
-app.listen(PORT, '0.0.0.0', async () => {
+(async () => {
     try {
         await testConnection();
 
-        console.log(`Server is running at http://localhost:${PORT}`);
-        console.log(`Environment: ${NODE_ENV}`);
+        const server = app.listen(PORT, '0.0.0.0', () => {
+            console.log(`Server is running at http://localhost:${PORT}`);
+            console.log(`Render URL: https://cse340-minchakpu.onrender.com/`);
+            console.log(`Environment: ${NODE_ENV}`);
+        });
     } catch (error) {
         console.error('Error connecting to the database:', error);
+        process.exit(1);
     }
-});
+})();
