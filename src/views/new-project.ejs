@@ -1,0 +1,73 @@
+<%- include('partials/header') %>
+<main class="new-organization-page">
+    <div class="new-organization-card">
+        <div class="new-organization-header">
+            <h1><%= title %></h1>
+            <p>Add the service project information below.</p>
+        </div>
+        <form action="/new-project" method="POST" class="new-organization-form">
+            <div class="new-organization-field">
+                <label for="title">Project Title</label>
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    minlength="3"
+                    maxlength="200"
+                    required
+                    placeholder="Enter project title"
+                />
+            </div>
+            <div class="new-organization-field">
+                <label for="description">Description</label>
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="5"
+                    maxlength="1000"
+                    required
+                    placeholder="Enter a brief description of the service project"
+                ></textarea>
+            </div>
+            <div class="new-organization-field">
+                <label for="location">Location</label>
+                <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    maxlength="200"
+                    required
+                    placeholder="Enter project location"
+                />
+            </div>
+            <div class="new-organization-field">
+                <label for="date">Project Date</label>
+                <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    required
+                />
+            </div>
+            <div class="new-organization-field">
+                <label for="organizationId">Organization</label>
+                <select
+                    id="organizationId"
+                    name="organizationId"
+                    required
+                >
+                    <option value="">Select an organization</option>
+                    <% organizations.forEach(org => { %>
+                        <option value="<%= org.organization_id %>">
+                            <%= org.name %>
+                        </option>
+                    <% }); %>
+                </select>
+            </div>
+            <button type="submit" class="create-organization-btn">
+                Create Project
+            </button>
+        </form>
+    </div>
+</main>
+<%- include('partials/footer') %>

@@ -276,7 +276,8 @@ footer p {
     font-weight: 600;
 }
 .new-organization-field input,
-.new-organization-field textarea {
+.new-organization-field textarea,
+.new-organization-field select {
     display: block;
     width: 100%;
     padding: 0.9rem 1rem;
@@ -299,11 +300,13 @@ footer p {
     resize: vertical;
 }
 .new-organization-field input::placeholder,
-.new-organization-field textarea::placeholder {
+.new-organization-field textarea::placeholder,
+.new-organization-field select::placeholder {
     color: #94a3b8;
 }
 .new-organization-field input:focus,
-.new-organization-field textarea:focus {
+.new-organization-field textarea:focus,
+.new-organization-field select:focus {
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }

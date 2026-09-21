@@ -1,6 +1,11 @@
 <%- include('partials/header') %>
 <main>
     <h1><%= title %></h1>
+    <p>
+        <a href="/new-project" class="add-project-btn">
+            Add a New Service Project
+        </a>
+    </p>
     <h2>Upcoming Service Projects</h2>
     <ul>
         <% projects.forEach(project => { %>
