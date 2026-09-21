@@ -153,11 +153,7 @@ app.listen(PORT, '0.0.0.0', async () => {
     try {
         await testConnection();
 
-        console.log(
-            `Database connection successful: ${new Date().toISOString()}`
-        );
-
-        console.log(`Server is running on port ${PORT}`);
+        console.log(`Server is running at http://localhost:${PORT}`);
         console.log(`Environment: ${NODE_ENV}`);
     } catch (error) {
         console.error('Error connecting to the database:', error);

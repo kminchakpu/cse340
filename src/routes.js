@@ -3,7 +3,8 @@ import { showHomePage } from './controllers/index.js';
 import { showOrganizationsPage, 
     showOrganizationDetailsPage, 
     showNewOrganizationForm, 
-    processNewOrganizationForm } from './controllers/organizations.js';
+    processNewOrganizationForm,
+    organizationValidation } from './controllers/organizations.js';
 import { showProjectsPage, showProjectDetailsPage } from './controllers/projects.js';
 import { showCategoriesPage, showCategoryDetailsPage } from './controllers/categories.js';
 import { testErrorPage } from './controllers/errors.js';
@@ -22,7 +23,7 @@ router.get('/category/:id', showCategoryDetailsPage);
 router.get('/new-organization', showNewOrganizationForm);
 
 // Route for processing the new organization form
-router.post('/new-organization', processNewOrganizationForm);
+router.post('/new-organization',  organizationValidation, processNewOrganizationForm);
 
 // Error-handling routes
 router.get('/test-error', testErrorPage);

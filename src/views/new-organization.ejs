@@ -12,6 +12,8 @@
                     type="text"
                     id="name"
                     name="name"
+                    maxlength="150"
+                    required
                     placeholder="Enter organization name"
                 />
             </div>
@@ -21,16 +23,19 @@
                     id="description"
                     name="description"
                     rows="5"
+                    maxlength="500"
+                    required
                     placeholder="Enter a brief description of the organization"
                 ></textarea>
             </div>
             <div class="new-organization-field">
                 <label for="contactEmail">Contact Email</label>
                 <input
-                    type="text"
+                    type="email"
                     id="contactEmail"
                     name="contactEmail"
                     placeholder="example@email.com"
+                    required
                 />
             </div>
             <button type="submit" class="create-organization-btn">

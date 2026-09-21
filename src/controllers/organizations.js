@@ -4,6 +4,29 @@ import {
     createOrganization
 } from '../models/organizations.js';
 import { getProjectsByOrganizationId } from '../models/projects.js';
+import { body, validationResult } from 'express-validator';
+
+// Define validation and sanitization rules for organization form
+const organizationValidation = [
+    body('name')
+        .trim()
+        .notEmpty()
+        .withMessage('Organization name is required')
+        .isLength({ min: 3, max: 150 })
+        .withMessage('Organization name must be between 3 and 150 characters'),
+    body('description')
+        .trim()
+        .notEmpty()
+        .withMessage('Organization description is required')
+        .isLength({ max: 500 })
+        .withMessage('Organization description cannot exceed 500 characters'),
+    body('contactEmail')
+        .normalizeEmail()
+        .notEmpty()
+        .withMessage('Contact email is required')
+        .isEmail()
+        .withMessage('Please provide a valid email address')
+];
 
 const showOrganizationsPage = async (req, res) => {
     const organizations = await getAllOrganizations();
@@ -30,11 +53,41 @@ const showOrganizationDetailsPage = async (req, res) => {
     });
 };
 
+const showNewOrganizationForm = async (req, res) => {
+    const title = 'Add New Organization';
+
+    res.render('new-organization', {
+        title
+    });
+};
+
 const processNewOrganizationForm = async (req, res, next) => {
     try {
+        // Check for validation errors
+        const results = validationResult(req);
+
+        // If validation fails, display errors and return to the form
+        if (!results.isEmpty()) {
+            results.array().forEach((error) => {
+                req.flash('error', error.msg);
+            });
+
+            return req.session.save((err) => {
+                if (err) {
+                    return next(err);
+                }
+
+                res.redirect('/new-organization');
+            });
+        }
+
+        // Get the validated and sanitized form data
         const { name, description, contactEmail } = req.body;
+
+        // Use the placeholder logo for new organizations
         const logoFilename = 'placeholder-logo.png';
 
+        // Create the organization
         const organizationId = await createOrganization(
             name,
             description,
@@ -42,11 +95,13 @@ const processNewOrganizationForm = async (req, res, next) => {
             logoFilename
         );
 
+        // Add success flash message
         req.flash(
             'success',
             'Organization added successfully!'
         );
 
+        // Save the session before redirecting
         req.session.save((err) => {
             if (err) {
                 return next(err);
@@ -59,17 +114,10 @@ const processNewOrganizationForm = async (req, res, next) => {
     }
 };
 
-const showNewOrganizationForm = async (req, res) => {
-    const title = 'Add New Organization';
-
-    res.render('new-organization', {
-        title
-    });
-};
-
 export {
     showOrganizationsPage,
     showOrganizationDetailsPage,
     showNewOrganizationForm,
-    processNewOrganizationForm
+    processNewOrganizationForm,
+    organizationValidation
 };
