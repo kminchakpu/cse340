@@ -310,6 +310,29 @@ footer p {
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
+
+.new-organization-field select {
+    cursor: pointer;
+    appearance: auto;
+}
+
+.new-organization-field input:focus,
+.new-organization-field textarea:focus,
+.new-organization-field select:focus {
+    outline: none;
+    border-color: #1d4ed8;
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+}
+
+.new-organization-field select:invalid {
+    color: #64748b;
+}
+
+.new-organization-field select option {
+    color: #0f172a;
+    background-color: #ffffff;
+}
+
 .create-organization-btn {
     display: block;
     width: 100%;
