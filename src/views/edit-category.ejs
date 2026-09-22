@@ -1,0 +1,38 @@
+<%- include('partials/header') %>
+
+<main class="new-organization-page">
+  <div class="new-organization-card">
+    <div class="new-organization-header">
+      <h1><%= title %></h1>
+      <p>Update the service category information below.</p>
+    </div>
+
+    <form
+      action="/edit-category/<%= category.category_id %>"
+      method="POST"
+      class="new-organization-form"
+    >
+      <div class="new-organization-field">
+        <label for="name">Category Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value="<%= category.name %>"
+          maxlength="100"
+          required
+          placeholder="Enter category name"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="create-organization-btn"
+      >
+        Update Category
+      </button>
+    </form>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
