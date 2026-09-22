@@ -1,0 +1,59 @@
+<%- include('partials/header') %>
+
+<main class="assign-categories-page">
+  <div class="assign-categories-container">
+    <div class="assign-categories-header">
+      <h1><%= projectDetails.title %></h1>
+      <h2>Assign Categories</h2>
+      <p>
+        Select the categories that should be assigned to this project.
+      </p>
+    </div>
+
+    <form
+      action="/assign-categories/<%= projectId %>"
+      method="POST"
+      class="assign-categories-form"
+    >
+      <div class="category-checkboxes">
+        <% if (categories.length > 0) { %>
+          <% categories.forEach(category => { %>
+            <div class="category-checkbox">
+              <input
+                type="checkbox"
+                id="category-<%= category.category_id %>"
+                name="categoryIds"
+                value="<%= category.category_id %>"
+                <%= assignedCategories.some(
+                  assignedCategory =>
+                    assignedCategory.category_id === category.category_id
+                ) ? 'checked' : '' %>
+              >
+
+              <label for="category-<%= category.category_id %>">
+                <%= category.name %>
+              </label>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <p>No categories are currently available.</p>
+        <% } %>
+      </div>
+
+      <div class="assign-categories-actions">
+        <button type="submit" class="btn-primary">
+          Update Categories
+        </button>
+
+        <a
+          href="/project/<%= projectId %>"
+          class="btn-secondary"
+        >
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
