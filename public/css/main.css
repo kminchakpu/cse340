@@ -540,8 +540,12 @@ main form button[type="submit"]:active {
 }
 
 .project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
   margin-top: 2rem;
 }
+.edit-project-btn,
 .edit-categories-btn {
   display: inline-block;
   padding: 0.75rem 1.25rem;
@@ -551,12 +555,52 @@ main form button[type="submit"]:active {
   font-weight: 600;
   text-decoration: none;
   border-radius: 6px;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
+.edit-project-btn:hover,
 .edit-categories-btn:hover {
   opacity: 0.9;
+  transform: translateY(-1px);
+  text-decoration: none;
 }
 
+.project-categories {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+.project-categories strong {
+  font-weight: 700;
+}
+.category-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.category-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.85rem;
+  background-color: #e8efff;
+  color: #1d2f6f;
+  border: 1px solid #c5d3f6;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.category-tag:hover {
+  background-color: #d5e1ff;
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+.no-categories {
+  color: #666;
+  font-style: italic;
+}
 
 
 /* ---------- Responsive Design ---------- */

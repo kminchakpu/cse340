@@ -1,7 +1,8 @@
 import {
   getUpcomingProjects,
   getProjectDetails,
-  createProject
+  createProject,
+  updateProject
 } from '../models/projects.js';
 
 import {
@@ -68,7 +69,6 @@ const showProjectsPage = async (req, res, next) => {
 const showProjectDetailsPage = async (req, res, next) => {
   try {
     const projectId = req.params.id;
-
     const project = await getProjectDetails(projectId);
 
     if (!project) {
@@ -78,7 +78,6 @@ const showProjectDetailsPage = async (req, res, next) => {
     }
 
     const categories = await getCategoriesByProjectId(projectId);
-
     const title = 'Project Details';
 
     res.render('project', {
@@ -107,10 +106,8 @@ const showNewProjectForm = async (req, res, next) => {
 
 const processNewProjectForm = async (req, res, next) => {
   try {
-    // Check for validation errors
     const results = validationResult(req);
 
-    // If validation fails, display errors and return to the form
     if (!results.isEmpty()) {
       results.array().forEach((error) => {
         req.flash('error', error.msg);
@@ -125,7 +122,6 @@ const processNewProjectForm = async (req, res, next) => {
       });
     }
 
-    // Get the validated and sanitized form data
     const {
       title,
       description,
@@ -134,7 +130,6 @@ const processNewProjectForm = async (req, res, next) => {
       organizationId
     } = req.body;
 
-    // Create the new service project
     const newProjectId = await createProject(
       title,
       description,
@@ -143,13 +138,11 @@ const processNewProjectForm = async (req, res, next) => {
       organizationId
     );
 
-    // Add success flash message
     req.flash(
       'success',
       'New service project created successfully!'
     );
 
-    // Save the session before redirecting
     req.session.save((err) => {
       if (err) {
         return next(err);
@@ -162,10 +155,89 @@ const processNewProjectForm = async (req, res, next) => {
   }
 };
 
+const showEditProjectForm = async (req, res, next) => {
+  try {
+    const projectId = req.params.id;
+    const project = await getProjectDetails(projectId);
+
+    if (!project) {
+      const error = new Error('Project Not Found');
+      error.status = 404;
+      return next(error);
+    }
+
+    const organizations = await getAllOrganizations();
+    const title = 'Edit Service Project';
+
+    res.render('edit-project', {
+      title,
+      project,
+      organizations
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const processEditProjectForm = async (req, res, next) => {
+  try {
+    const projectId = req.params.id;
+    const results = validationResult(req);
+
+    if (!results.isEmpty()) {
+      results.array().forEach((error) => {
+        req.flash('error', error.msg);
+      });
+
+      return req.session.save((err) => {
+        if (err) {
+          return next(err);
+        }
+
+        res.redirect(`/edit-project/${projectId}`);
+      });
+    }
+
+    const {
+      title,
+      description,
+      location,
+      date,
+      organizationId
+    } = req.body;
+
+    await updateProject(
+      projectId,
+      title,
+      description,
+      location,
+      date,
+      organizationId
+    );
+
+    req.flash(
+      'success',
+      'Service project updated successfully!'
+    );
+
+    req.session.save((err) => {
+      if (err) {
+        return next(err);
+      }
+
+      res.redirect(`/project/${projectId}`);
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   showProjectsPage,
   showProjectDetailsPage,
   showNewProjectForm,
   processNewProjectForm,
+  showEditProjectForm,
+  processEditProjectForm,
   projectValidation
 };

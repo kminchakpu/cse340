@@ -382,3 +382,16 @@ FROM public.project p
 LEFT JOIN public.project_category pc
     ON p.project_id = pc.project_id
 WHERE pc.project_id IS NULL;
+
+
+
+
+UPDATE public.project
+SET
+  title = $1,
+  description = $2,
+  location = $3,
+  date = $4,
+  organization_id = $5
+WHERE project_id = $6
+RETURNING *;
