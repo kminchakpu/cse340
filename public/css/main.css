@@ -602,7 +602,7 @@ main form button[type="submit"]:active {
   font-style: italic;
 }
 
-
+.add-project-btn,
 .add-category-btn,
 .edit-category-btn {
   display: inline-block;
@@ -615,12 +615,16 @@ main form button[type="submit"]:active {
   border-radius: 6px;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
+
+.add-project-btn:hover,
 .add-category-btn:hover,
 .edit-category-btn:hover {
   opacity: 0.9;
   transform: translateY(-1px);
   text-decoration: none;
 }
+
+.add-project-btn:focus-visible,
 .add-category-btn:focus-visible,
 .edit-category-btn:focus-visible {
   outline: 3px solid #fdba74;

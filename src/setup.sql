@@ -395,3 +395,16 @@ SET
   organization_id = $5
 WHERE project_id = $6
 RETURNING *;
+
+
+
+
+SELECT
+  pc.project_id,
+  pc.category_id,
+  c.name
+FROM public.project_category pc
+JOIN public.category c
+  ON pc.category_id = c.category_id
+WHERE pc.project_id = PROJECT_ID
+ORDER BY c.name;
