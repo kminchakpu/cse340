@@ -408,3 +408,24 @@ JOIN public.category c
   ON pc.category_id = c.category_id
 WHERE pc.project_id = PROJECT_ID
 ORDER BY c.name;
+
+-- ========================================
+-- Selecting All Organizations
+-- ========================================
+SELECT *
+FROM organizations
+ORDER BY organization_id DESC;
+
+-- Deleting specific organizations
+
+DELETE FROM organizations
+WHERE organization_id IN (16, 17);
+
+
+-- Deleting specific organizations by name
+DELETE FROM organizations
+WHERE name IN (
+    'Bright Futures Education Foundation',
+    'Digital Skills Africa Initiative',
+    'Another Test Organization'
+);
