@@ -39,19 +39,10 @@ if (NODE_ENV === 'production') {
 }
 
 /**
- * Make common variables available to all EJS templates.
- */
-app.use((req, res, next) => {
-    res.locals.currentPath = req.path || '/';
-    res.locals.NODE_ENV = NODE_ENV;
-    next();
-});
-
-/**
  * Configure express-session middleware.
  *
- * Sessions are required for flash messages because flash messages
- * must survive the redirect from one request to another.
+ * Sessions must be configured before any middleware that needs
+ * access to req.session.
  */
 app.use(
     session({
@@ -66,6 +57,24 @@ app.use(
         },
     })
 );
+
+/**
+ * Make common variables available to all EJS templates.
+ *
+ * This middleware must run after express-session because
+ * isLoggedIn depends on req.session.user.
+ */
+app.use((req, res, next) => {
+    res.locals.currentPath = req.path || '/';
+    res.locals.isLoggedIn = false;
+
+    if (req.session && req.session.user) {
+        res.locals.isLoggedIn = true;
+    }
+
+    res.locals.NODE_ENV = NODE_ENV;
+    next();
+});
 
 /**
  * Flash messages middleware.
@@ -128,37 +137,52 @@ app.use((err, req, res, next) => {
 
     // Make sure these variables are available to the error page
     res.locals.currentPath = req.path || '/';
+    res.locals.isLoggedIn = Boolean(
+        req.session && req.session.user
+    );
     res.locals.NODE_ENV = NODE_ENV;
 
     const status = err.status || 500;
-
     const template = status === 404 ? '404' : '500';
 
     const context = {
-        title: status === 404 ? 'Page Not Found' : 'Server Error',
+        title: status === 404
+            ? 'Page Not Found'
+            : 'Server Error',
         error: err.message,
         stack: err.stack,
     };
 
-    res.status(status).render(`errors/${template}`, context);
+    res.status(status).render(
+        `errors/${template}`,
+        context
+    );
 });
 
 /**
  * Start the server.
  *
- * Test database connection first, then start listening for HTTP requests.
+ * Test database connection first, then start listening
+ * for HTTP requests.
  */
 (async () => {
     try {
         await testConnection();
 
-        const server = app.listen(PORT, '0.0.0.0', () => {
-            console.log(`Server is running at http://localhost:${PORT}`);
-            console.log(`Render URL: https://cse340-minchakpu.onrender.com/`);
+        app.listen(PORT, '0.0.0.0', () => {
+            console.log(
+                `Server is running at http://localhost:${PORT}`
+            );
+            console.log(
+                'Render URL: https://cse340-minchakpu.onrender.com/'
+            );
             console.log(`Environment: ${NODE_ENV}`);
         });
     } catch (error) {
-        console.error('Error connecting to the database:', error);
+        console.error(
+            'Error connecting to the database:',
+            error
+        );
         process.exit(1);
     }
 })();
