@@ -1,0 +1,25 @@
+<%- include('partials/header') %>
+<main class="dashboard-page">
+    <section class="dashboard-container">
+        <h1><%= title %></h1>
+        <h2>Welcome, <%= name %>!</h2>
+        <div class="dashboard-user-info">
+            <p>
+                <strong>Name:</strong>
+                <%= name %>
+            </p>
+            <p>
+                <strong>Email:</strong>
+                <%= email %>
+            </p>
+        </div>
+        <% if (user && user.role_name === 'admin') { %>
+            <div class="dashboard-admin-actions">
+                <a href="/users" class="dashboard-users-btn">
+                    View Registered Users
+                </a>
+            </div>
+        <% } %>
+    </section>
+</main>
+<%- include('partials/footer') %>

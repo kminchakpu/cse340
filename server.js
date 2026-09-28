@@ -62,7 +62,7 @@ app.use(
  * Make common variables available to all EJS templates.
  *
  * This middleware must run after express-session because
- * isLoggedIn depends on req.session.user.
+ * isLoggedIn and user depend on req.session.user.
  */
 app.use((req, res, next) => {
     res.locals.currentPath = req.path || '/';
@@ -72,6 +72,7 @@ app.use((req, res, next) => {
         res.locals.isLoggedIn = true;
     }
 
+    res.locals.user = req.session?.user || null;
     res.locals.NODE_ENV = NODE_ENV;
     next();
 });
@@ -140,6 +141,7 @@ app.use((err, req, res, next) => {
     res.locals.isLoggedIn = Boolean(
         req.session && req.session.user
     );
+    res.locals.user = req.session?.user || null;
     res.locals.NODE_ENV = NODE_ENV;
 
     const status = err.status || 500;

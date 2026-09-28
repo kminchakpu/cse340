@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt';
 import {
   createUser,
-  authenticateUser
+  authenticateUser,
+  getAllUsers
 } from '../models/users.js';
 
 const showUserRegistrationForm = (req, res) => {
@@ -47,7 +48,7 @@ const processLoginForm = async (req, res) => {
       if (res.locals.NODE_ENV === 'development') {
         console.log('User logged in:', user);
       }
-      return res.redirect('/');
+      return res.redirect('/dashboard');
     }
     req.flash('error', 'Invalid email or password.');
     return res.redirect('/login');
@@ -69,10 +70,67 @@ const processLogout = (req, res) => {
   res.redirect('/login');
 };
 
+const requireLogin = (req, res, next) => {
+  if (!req.session || !req.session.user) {
+    req.flash(
+      'error',
+      'You must be logged in to access that page.'
+    );
+    return res.redirect('/login');
+  }
+  next();
+};
+
+const requireRole = (role, redirectPath = '/') => {
+  return (req, res, next) => {
+    if (!req.session || !req.session.user) {
+      req.flash(
+        'error',
+        'You must be logged in to access this page.'
+      );
+      return res.redirect('/login');
+    }
+    if (req.session.user.role_name !== role) {
+      req.flash(
+        'error',
+        'You do not have permission to access this page.'
+      );
+      return res.redirect(redirectPath);
+    }
+    next();
+  };
+};
+
+const showDashboard = (req, res) => {
+  const user = req.session.user;
+  res.render('dashboard', {
+    title: 'Dashboard',
+    name: user.name,
+    email: user.email
+  });
+};
+
+const showUsersPage = async (req, res, next) => {
+  try {
+    const users = await getAllUsers();
+    res.render('users', {
+      title: 'Registered Users',
+      users
+    });
+  } catch (error) {
+    console.error('Error retrieving users:', error);
+    next(error);
+  }
+};
+
 export {
   showUserRegistrationForm,
   processUserRegistrationForm,
   showLoginForm,
   processLoginForm,
-  processLogout
+  processLogout,
+  requireLogin,
+  requireRole,
+  showDashboard,
+  showUsersPage
 };

@@ -1,0 +1,30 @@
+<%- include('partials/header') %>
+<main>
+  <h1><%= title %></h1>
+  <p>View all users currently registered in the system.</p>
+  <% if (users.length > 0) { %>
+    <div class="users-table-container">
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(registeredUser => { %>
+            <tr>
+              <td><%= registeredUser.name %></td>
+              <td><%= registeredUser.email %></td>
+              <td><%= registeredUser.role_name %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <p>There are currently no registered users.</p>
+  <% } %>
+</main>
+<%- include('partials/footer') %>

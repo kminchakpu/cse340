@@ -34,19 +34,21 @@
       <span class="no-categories">No categories assigned.</span>
     <% } %>
   </div>
-  <div class="project-actions">
-    <a
-      href="/edit-project/<%= project.project_id %>"
-      class="edit-project-btn"
-    >
-      Edit Project
-    </a>
-    <a
-      href="/assign-categories/<%= project.project_id %>"
-      class="edit-categories-btn"
-    >
-      Edit Categories
-    </a>
-  </div>
+  <% if (user && user.role_name === 'admin') { %>
+    <div class="project-actions">
+      <a
+        href="/edit-project/<%= project.project_id %>"
+        class="edit-project-btn"
+      >
+        Edit Project
+      </a>
+      <a
+        href="/assign-categories/<%= project.project_id %>"
+        class="edit-categories-btn"
+      >
+        Edit Categories
+      </a>
+    </div>
+  <% } %>
 </main>
 <%- include('partials/footer') %>

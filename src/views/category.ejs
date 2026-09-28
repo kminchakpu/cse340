@@ -1,14 +1,16 @@
 <%- include('partials/header') %>
 <main>
   <h1><%= category.name %></h1>
-  <div class="category-page-actions">
-    <a
-      href="/edit-category/<%= category.category_id %>"
-      class="edit-category-btn"
-    >
-      Edit Category
-    </a>
-  </div>
+  <% if (user && user.role_name === 'admin') { %>
+    <div class="category-page-actions">
+      <a
+        href="/edit-category/<%= category.category_id %>"
+        class="edit-category-btn"
+      >
+        Edit Category
+      </a>
+    </div>
+  <% } %>
   <h2>Service Projects</h2>
   <% if (projects.length > 0) { %>
     <ul>

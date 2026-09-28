@@ -1,19 +1,17 @@
 <%- include('partials/header') %>
-
 <main>
   <h1><%= title %></h1>
-
-  <div class="category-page-actions">
-    <a
-      href="/new-category"
-      class="add-category-btn"
-    >
-      + Add New Category
-    </a>
-  </div>
-
+  <% if (user && user.role_name === 'admin') { %>
+    <div class="category-page-actions">
+      <a
+        href="/new-category"
+        class="add-category-btn"
+      >
+        + Add New Category
+      </a>
+    </div>
+  <% } %>
   <h2>Service Project Categories</h2>
-
   <ul>
     <% categories.forEach(category => { %>
       <li>
@@ -24,5 +22,4 @@
     <% }) %>
   </ul>
 </main>
-
 <%- include('partials/footer') %>
