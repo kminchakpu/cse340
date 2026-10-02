@@ -470,3 +470,44 @@ JOIN roles r ON u.role_id = r.role_id;
 
 DELETE FROM users
 WHERE email = 'test@example.com';
+
+-- ==========================================
+-- Create Project Volunteers Table
+-- ==========================================
+
+CREATE TABLE project_volunteers (
+  user_id INTEGER NOT NULL,
+  project_id INTEGER NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (user_id, project_id),
+
+  CONSTRAINT fk_project_volunteers_user
+    FOREIGN KEY (user_id)
+    REFERENCES users(user_id)
+    ON DELETE CASCADE,
+
+  CONSTRAINT fk_project_volunteers_project
+    FOREIGN KEY (project_id)
+    REFERENCES project(project_id)
+    ON DELETE CASCADE
+);
+
+
+-- ==========================================
+-- Verify Project Volunteers Table
+-- ==========================================
+
+SELECT
+  pv.user_id,
+  u.name AS volunteer_name,
+  u.email,
+  pv.project_id,
+  p.title AS project_title,
+  pv.created_at
+FROM project_volunteers pv
+JOIN users u
+  ON pv.user_id = u.user_id
+JOIN project p
+  ON pv.project_id = p.project_id
+ORDER BY pv.created_at DESC;

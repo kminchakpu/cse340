@@ -12,6 +12,8 @@ import {
 import {
   showProjectsPage,
   showProjectDetailsPage,
+  processVolunteerSignup,
+  processVolunteerRemoval,
   showNewProjectForm,
   processNewProjectForm,
   showEditProjectForm,
@@ -75,6 +77,16 @@ router.post(
 // Project routes
 router.get('/projects', showProjectsPage);
 router.get('/project/:id', showProjectDetailsPage);
+router.post(
+  '/project/:id/volunteer',
+  requireLogin,
+  processVolunteerSignup
+);
+router.post(
+  '/project/:id/remove-volunteer',
+  requireLogin,
+  processVolunteerRemoval
+);
 router.get(
   '/new-project',
   requireRole('admin'),

@@ -31,9 +31,49 @@
         <% }); %>
       </div>
     <% } else { %>
-      <span class="no-categories">No categories assigned.</span>
+      <span class="no-categories">
+        No categories assigned.
+      </span>
     <% } %>
   </div>
+  <% if (isLoggedIn) { %>
+    <section class="volunteer-section">
+      <h2>Volunteer</h2>
+      <% if (isVolunteering) { %>
+        <p class="volunteer-status">
+          You are volunteering for this project.
+        </p>
+        <form
+          action="/project/<%= project.project_id %>/remove-volunteer"
+          method="POST"
+          class="volunteer-form"
+        >
+          <button
+            type="submit"
+            class="remove-volunteer-btn"
+          >
+            Remove Volunteer Signup
+          </button>
+        </form>
+      <% } else { %>
+        <p>
+          Would you like to help with this service project?
+        </p>
+        <form
+          action="/project/<%= project.project_id %>/volunteer"
+          method="POST"
+          class="volunteer-form"
+        >
+          <button
+            type="submit"
+            class="volunteer-btn"
+          >
+            Volunteer for this Project
+          </button>
+        </form>
+      <% } %>
+    </section>
+  <% } %>
   <% if (user && user.role_name === 'admin') { %>
     <div class="project-actions">
       <a

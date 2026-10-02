@@ -4,6 +4,9 @@ import {
   authenticateUser,
   getAllUsers
 } from '../models/users.js';
+import {
+  getVolunteerProjectsByUserId
+} from '../models/volunteers.js';
 
 const showUserRegistrationForm = (req, res) => {
   res.render('register', {
@@ -21,7 +24,7 @@ const processUserRegistrationForm = async (req, res) => {
       'success',
       'Registration successful! Please log in.'
     );
-    res.redirect('/');
+    res.redirect('/login');
   } catch (error) {
     console.error('Error registering user:', error);
     req.flash(
@@ -101,13 +104,27 @@ const requireRole = (role, redirectPath = '/') => {
   };
 };
 
-const showDashboard = (req, res) => {
-  const user = req.session.user;
-  res.render('dashboard', {
-    title: 'Dashboard',
-    name: user.name,
-    email: user.email
-  });
+const showDashboard = async (req, res, next) => {
+  try {
+    const user = req.session.user;
+    const volunteerProjects =
+      await getVolunteerProjectsByUserId(
+        user.user_id
+      );
+
+    res.render('dashboard', {
+      title: 'Dashboard',
+      name: user.name,
+      email: user.email,
+      volunteerProjects
+    });
+  } catch (error) {
+    console.error(
+      'Error retrieving volunteer projects:',
+      error
+    );
+    next(error);
+  }
 };
 
 const showUsersPage = async (req, res, next) => {

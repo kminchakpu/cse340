@@ -1,25 +1,91 @@
 <%- include('partials/header') %>
 <main class="dashboard-page">
-    <section class="dashboard-container">
-        <h1><%= title %></h1>
-        <h2>Welcome, <%= name %>!</h2>
-        <div class="dashboard-user-info">
-            <p>
-                <strong>Name:</strong>
-                <%= name %>
-            </p>
-            <p>
-                <strong>Email:</strong>
-                <%= email %>
-            </p>
-        </div>
-        <% if (user && user.role_name === 'admin') { %>
-            <div class="dashboard-admin-actions">
-                <a href="/users" class="dashboard-users-btn">
-                    View Registered Users
+  <section class="dashboard-container">
+    <h1><%= title %></h1>
+    <h2>Welcome, <%= name %>!</h2>
+    <div class="dashboard-user-info">
+      <p>
+        <strong>Name:</strong>
+        <%= name %>
+      </p>
+      <p>
+        <strong>Email:</strong>
+        <%= email %>
+      </p>
+    </div>
+    <% if (user && user.role_name === 'admin') { %>
+      <div class="dashboard-admin-actions">
+        <a href="/users" class="dashboard-users-btn">
+          View Registered Users
+        </a>
+      </div>
+    <% } %>
+    <section class="dashboard-volunteer-section">
+      <h2>My Volunteer Projects</h2>
+      <% if (volunteerProjects.length > 0) { %>
+        <div class="volunteer-projects-list">
+          <% volunteerProjects.forEach(project => { %>
+            <article class="volunteer-project-card">
+              <h3>
+                <a href="/project/<%= project.project_id %>">
+                  <%= project.title %>
                 </a>
-            </div>
-        <% } %>
+              </h3>
+              <p>
+                <strong>Date:</strong>
+                <%= new Date(project.date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                }) %>
+              </p>
+              <p>
+                <strong>Location:</strong>
+                <%= project.location %>
+              </p>
+              <p>
+                <strong>Organization:</strong>
+                <%= project.organization_name %>
+              </p>
+              <div class="volunteer-project-actions">
+                <a
+                  href="/project/<%= project.project_id %>"
+                  class="view-project-btn"
+                >
+                  View Project
+                </a>
+                <form
+                  action="/project/<%= project.project_id %>/remove-volunteer"
+                  method="POST"
+                  class="volunteer-form"
+                >
+                  <input
+                    type="hidden"
+                    name="redirectTo"
+                    value="/dashboard"
+                  >
+                  <button
+                    type="submit"
+                    class="remove-volunteer-btn"
+                  >
+                    Remove Volunteer Signup
+                  </button>
+                </form>
+              </div>
+            </article>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <div class="volunteer-empty-state">
+          <p>
+            You have not signed up to volunteer for any projects yet.
+          </p>
+          <a href="/projects" class="browse-projects-btn">
+            Browse Service Projects
+          </a>
+        </div>
+      <% } %>
     </section>
+  </section>
 </main>
 <%- include('partials/footer') %>
